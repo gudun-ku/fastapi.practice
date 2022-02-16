@@ -7,10 +7,10 @@ ENV PATH=”$VIRTUAL_ENV/bin:$PATH”
 # Install dependencies:
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-COPY start.sh .
-RUN CHMOD +x start.sh
+COPY ./start.sh /start.sh
+RUN chmod +x /start.sh
 
 
 # Run the application:
 COPY server.py .
-CMD ["start.sh"]
+CMD ["./start.sh"]
