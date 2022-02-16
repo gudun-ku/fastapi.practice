@@ -10,4 +10,4 @@ RUN pip install -r requirements.txt
 
 # Run the application:
 COPY server.py .
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "${PORT:5000}"]
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "$PORT"]
