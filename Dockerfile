@@ -7,5 +7,5 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Run the application:
-COPY ./app/*.py .
+COPY app/. .
 CMD uvicorn server:app --host 0.0.0.0 --port $PORT
