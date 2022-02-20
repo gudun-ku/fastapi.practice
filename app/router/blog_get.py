@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Response, status, Depends
 from enum import Enum
 from typing import Optional
+
+from router.blog_post import required_functionality
 
 router = APIRouter(
     prefix="/blog",
@@ -17,8 +19,8 @@ class BlogType(str, Enum):
 @router.get("/all", summary="Get all blogs",
             description="Retrieve all existing blogs on the server",
             response_description="The list of available blogs")
-def get_all_blogs(page=1, page_size: Optional[int] = None):
-    return {"message": f"All {page_size} blogs on page {page}"}
+def get_blogs(page=1, page_size: Optional[int] = None, req_parameter: dict = Depends(required_functionality)):
+    return {"message": f"All {page_size} blogs on page {page}", "req": req_parameter}
 
 
 @router.get("/{id}/comments/{comment_id}", tags=["comment"])
@@ -34,8 +36,8 @@ def get_comment(id: int, comment_id: int, valid: bool = True, username: Optional
 
 
 @router.get("/type/{type}")
-def get_blog_type(type: BlogType):
-    return {"message": f"Blog type: {type}"}
+def get_blog_type(type: BlogType, req_parameter: dict = Depends(required_functionality)):
+    return {"message": f"Blog type: {type}", "req": req_parameter}
 
 
 @router.get("/{id}", status_code=status.HTTP_200_OK)
