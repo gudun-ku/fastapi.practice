@@ -1,9 +1,11 @@
+import imp
 from typing import List
 from fastapi import APIRouter, Depends
 from schemas import UserBase, UserResponse
 from sqlalchemy.orm.session import Session
 from data.database import get_db
 from data import db_user
+from auth.oauth2 import get_current_user
 
 router = APIRouter(
     prefix="/user",
@@ -21,24 +23,24 @@ def create_user(request: UserBase, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=List[UserResponse])
-def get_all_users(db: Session = Depends(get_db)):
+def get_all_users(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.get_all_users(db)
 
 
 @router.get("/{id}", response_model=UserResponse)
-def get_user(id: int, db: Session = Depends(get_db)):
+def get_user(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.get_user(db, id)
 
 # Update user
 
 
 @router.put("/{id}")
-def update_user(id: int, request: UserBase, db: Session = Depends(get_db)):
+def update_user(id: int, request: UserBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.update_user(db, id, request)
 
 # Delete user
 
 
 @router.delete("/{id}")
-def delete_user(id: int, db: Session = Depends(get_db)):
+def delete_user(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return db_user.delete_user(db, id)
